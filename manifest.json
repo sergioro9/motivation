@@ -1,6 +1,5 @@
 {
    "background": {
-      "persistent": false,
       "scripts": [ "motivation.js" ]
    },
    "chrome_url_overrides": {
@@ -15,6 +14,5 @@
    },
    "manifest_version": 2,
    "name": "Motivation",
-   "offline_enabled": true,
    "version": "0.6"
 }
