@@ -1,18 +1,18 @@
 
-function Redirect(o) {
+function Quo(o) {
 	this._init(o);
 }
 
 //temp, allow addon sdk to require this.
 if (typeof exports !== 'undefined') {
-	exports.Redirect = Redirect;
+	exports.Quo = Quo;
 }
 
 //Static
-Redirect.WILDCARD = 'W';
-Redirect.REGEX = 'R';
+Quo.WILDCARD = 'W';
+Quo.REGEX = 'R';
 
-Redirect.requestTypes = {
+Quo.requestTypes = {
 	main_frame: "Main window (address bar)",
 	sub_frame: "IFrames",
 	stylesheet : "Stylesheets",
@@ -25,7 +25,7 @@ Redirect.requestTypes = {
 };
 
 
-Redirect.prototype = {
+Quo.prototype = {
 	
 	//attributes
 	description : '',
@@ -35,7 +35,7 @@ Redirect.prototype = {
 	includePattern : '',
 	excludePattern : '',
 	patternDesc:'',
-	redirectUrl : '',
+	quoUrl : '',
 	patternType : '',
 	processMatches : 'noProcessing',
 	disabled : false,
@@ -53,16 +53,16 @@ Redirect.prototype = {
 		}
 	},
 
-	equals : function(redirect) {
-		return this.description == redirect.description
-			&& this.exampleUrl == redirect.exampleUrl
-			&& this.includePattern == redirect.includePattern
-			&& this.excludePattern == redirect.excludePattern
-			&& this.patternDesc == redirect.patternDesc
-			&& this.redirectUrl == redirect.redirectUrl
-			&& this.patternType == redirect.patternType
-			&& this.processMatches == redirect.processMatches
-			&& this.appliesTo.toString() == redirect.appliesTo.toString();
+	equals : function(quo) {
+		return this.description == quo.description
+			&& this.exampleUrl == quo.exampleUrl
+			&& this.includePattern == quo.includePattern
+			&& this.excludePattern == quo.excludePattern
+			&& this.patternDesc == quo.patternDesc
+			&& this.quoUrl == quo.quoUrl
+			&& this.patternType == quo.patternType
+			&& this.processMatches == quo.processMatches
+			&& this.appliesTo.toString() == quo.appliesTo.toString();
 	},
 	
 	toObject : function() {
@@ -74,7 +74,7 @@ Redirect.prototype = {
 			includePattern : this.includePattern,
 			excludePattern : this.excludePattern,
 			patternDesc : this.patternDesc,
-			redirectUrl : this.redirectUrl,
+			quoUrl : this.quoUrl,
 			patternType : this.patternType,
 			processMatches : this.processMatches,
 			disabled : this.disabled,
@@ -90,20 +90,20 @@ Redirect.prototype = {
 			isMatch : false, 
 			isExcludeMatch : false, 
 			isDisabledMatch : false, 
-			redirectTo : '',
+			quoTo : '',
 			toString : function() { return JSON.stringify(this); }
 		};
-		var redirectTo = null;
+		var quoTo = null;
 
-		redirectTo = this._includeMatch(url);
-		if (redirectTo !== null) {
+		quoTo = this._includeMatch(url);
+		if (quoTo !== null) {
 			if (this.disabled && !forceIgnoreDisabled) {
 				result.isDisabledMatch = true;
 			} else if (this._excludeMatch(url)) {
 				result.isExcludeMatch = true;
 			} else {
 				result.isMatch = true;
-				result.redirectTo = redirectTo;
+				result.quoTo = quoTo;
 			}
 		}
 		return result;	 
@@ -111,7 +111,7 @@ Redirect.prototype = {
 	
 	//Updates the .exampleResult field or the .error
 	//field depending on if the example url and patterns match 
-	//and make a good redirect
+	//and make a good quo
 	updateExampleResult : function() {
 
 		//Default values
@@ -124,7 +124,7 @@ Redirect.prototype = {
 			return;
 		}
 
-		if (this.patternType == Redirect.REGEX && this.includePattern) {
+		if (this.patternType == Quo.REGEX && this.includePattern) {
 			try {
 				new RegExp(this.includePattern, 'gi');
 			} catch(e) {
@@ -133,7 +133,7 @@ Redirect.prototype = {
 			}
 		}
 
-		if (this.patternType == Redirect.REGEX && this.excludePattern) {
+		if (this.patternType == Quo.REGEX && this.excludePattern) {
 			try {
 				new RegExp(this.excludePattern, 'gi');
 			} catch(e) {
@@ -161,15 +161,15 @@ Redirect.prototype = {
 			return;
 		}
 
-		this.exampleResult = match.redirectTo;
+		this.exampleResult = match.quoTo;
 	},
 
 	isRegex: function() {
-		return this.patternType == Redirect.REGEX;
+		return this.patternType == Quo.REGEX;
 	},
 	
 	isWildcard : function() {
-		return this.patternType == Redirect.WILDCARD;	
+		return this.patternType == Quo.WILDCARD;	
 	},
 
 	test : function() {
@@ -184,7 +184,7 @@ Redirect.prototype = {
 		if (!pattern) {
 			return null;
 		}
-		if (this.patternType == Redirect.REGEX) {
+		if (this.patternType == Quo.REGEX) {
 			return pattern; 
 		} else { //Convert wildcard to regex pattern
 			var converted = '^';
@@ -210,8 +210,8 @@ Redirect.prototype = {
 		this.error = o.error || null;
 		this.includePattern = o.includePattern || '';
 		this.excludePattern = o.excludePattern || '';
-		this.redirectUrl = o.redirectUrl || '';
-		this.patternType = o.patternType || Redirect.WILDCARD;
+		this.quoUrl = o.quoUrl || '';
+		this.patternType = o.patternType || Quo.WILDCARD;
 		this.patternDesc = o.patternDesc || '';
 		this.processMatches = o.processMatches || 'noProcessing';
 		if (!o.processMatches && o.unescapeMatches) {
@@ -241,7 +241,7 @@ Redirect.prototype = {
 		if (!matches) {
 			return null;
 		}
-		var resultUrl = this.redirectUrl;
+		var resultUrl = this.quoUrl;
 		for (var i = 1; i < matches.length; i++) {
 			var repl = matches[i] || '';
 			if (this.processMatches == 'urlDecode') {

@@ -15,6 +15,11 @@ Your age.
 
   [ ] add option so that user can add his own quotes
 
+  [ ] How to create default text symbols like this (from redirector.html): ☈ ?
+
+  [ ] Remove the 'style=' attributes in quo.html, which are not used in
+  redirector.html
+
 ## Notes
 
   * insightful comment in ref 3: Don't complicate your life trying to

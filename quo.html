@@ -1,135 +1,62 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>REDIRECTOR</title>
+		<title>Quo</title>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href="css/redirector.css" />
+		<link rel="stylesheet" href="css/quo.css" />
 		<!-- ☈ -->
 		<link rel="shortcut icon" href="images/icon-active-32.png">
 
 
 		<script src="js/angular.min.js"></script>
-		<script src="js/redirect.js"></script>
+		<script src="js/quo.js"></script>
 		<script src="js/app.js"></script>
-		<script src="js/controllers/redirectorpage.js"></script>
-		<script src="js/controllers/editredirect.js"></script>
-		<script src="js/controllers/deleteredirect.js"></script>
+		<script src="js/controllers/quopage.js"></script>
+		<script src="js/controllers/editquo.js"></script>
+		<script src="js/controllers/deletequo.js"></script>
 		<script src="js/controllers/importexport.js"></script>
-		<script src="js/controllers/listredirects.js"></script>
+		<script src="js/controllers/listquotes.js"></script>
 	</head>
-	<body ng-app="redirectorApp" ng-controller="RedirectorPageCtrl" class="private">
-		<div id="cover" ng-show="showEditForm || showDeleteForm">
+	<body ng-app="quoApp" ng-controller="quoPageCtrl" class="private">
+		<div id="cover" ng-show="showEditForm || showDeleteForm" style="display:none;">
 			<div id="private-mode-message" ng-show="false">
-				Redirector does not work in Private Mode
+        Quo does not work in Private Mode {{2+2}}
 			</div>			
 		</div>
 		
-		<!-- Confirmation form for deleting redirects -->
-		<div id="delete-redirect-form" ng-show="showDeleteForm" ng-controller="DeleteRedirectCtrl">
-			<h3>Are you sure you want to delete this redirect?</h3>
+		<!-- Confirmation form for deleting quotes -->
+		<div id="delete-quo-form" ng-show="showDeleteForm" ng-controller="DeleteQuoCtrl">
+			<h3>Are you sure you want to delete this quo?</h3>
 			<div>
-				<label>Description:</label>
-				<span>{{redirect.description}}</span>
+				<label>Quote:</label>
+				<span>{{quo.description}}</span>
 			</div>
 			<div>
-				<label>Example URL:</label>
-				<span>{{redirect.exampleUrl}}</span>
+				<label>Author:</label>
+				<span>{{quo.exampleUrl}}</span>
 			</div>
-			<div>
-				<label>Include pattern:</label>
-				<span>{{redirect.includePattern}}
-			</div>
-			<div>
-				<label>Redirect to:</label>
-				<span>{{redirect.redirectUrl}}</span>
-			</div>
-			<div>
-				<label>Pattern type:</label>
-				<span>{{redirect.patternType == 'W' ? 'Wildcard' : 'Regular Expression'}}</span>
-			</div>
-			<div>
-				<label>Pattern Description:</label>
-				<span>{{redirect.patternDesc}}</span>
-			</div>				
 			<div class="button-container">
-				<a class="btn red large" ng-click="deleteRedirect()">Yes, delete it</a>
+				<a class="btn red large" ng-click="deleteQuo()">Yes, delete it</a>
 				<a class="btn grey large" ng-click="cancelDelete()">No, don't delete it</a>
 			</div>
 		</div>
 		
 
-		<!-- Form for creating and editing redirects -->
-		<div id="edit-redirect-form" ng-show="showEditForm" ng-controller="EditRedirectCtrl">
-			<h3>{{editIndex >= 0 ? 'Edit' : 'Create'}} Redirect</h3>
+		<!-- Form for creating and editing quotes -->
+		<div id="edit-quo-form" ng-show="showEditForm" ng-controller="EditQuoCtrl">
+			<h3>{{editIndex >= 0 ? 'Edit' : 'Create'}} Quo</h3>
 			<div class="form-grid">
 				<div>
-					<label>Description:</label>
-					<div class="input-cell"><input type="text" ng-model="redirect.description" placeholder="Enter a description for your redirect rule" /></div>
+					<label>Quote:</label>
+					<div class="input-cell"><input type="text" ng-model="quo.description" placeholder="Enter a description for your quo rule" /></div>
 				</div>
 				<div>
-					<label>Example URL:</label>
-					<div class="input-cell"><input type="text" ng-model="redirect.exampleUrl" ng-change="redirect.updateExampleResult()" placeholder="http://example.com/some/path?a=1" /></div>
-				</div>
-				<div>
-					<label>Include pattern:</label>
-					<div class="input-cell"><input type="text" ng-model="redirect.includePattern" ng-change="redirect.updateExampleResult()" placeholder="Pattern that matches the urls you want to redirect" /></div>
-				</div>
-				<div>
-					<label>Redirect to:</label>
-					<div class="input-cell"><input type="text" ng-model="redirect.redirectUrl" ng-change="redirect.updateExampleResult()" placeholder="The url you want to redirect requests to" /></div>
-				</div>
-				<div>
-					<label>Pattern type:</label>
-					<div class="input-cell">
-						<label id="wildcardtype">
-						<input type="radio" ng-change="redirect.updateExampleResult()" ng-model="redirect.patternType" name="patterntype" value="W">Wildcard</label>
-						<label id="regextype">
-							<input type="radio" ng-change="redirect.updateExampleResult()" ng-model="redirect.patternType" name="patterntype" value="R">Regular Expression</label>
-					</div>
-				</div>
-				<div>
-					<label>Pattern Description:</label>
-					<div class="input-cell"><input type="text" ng-model="redirect.patternDesc" placeholder="Describe your pattern" /></div>
-				</div>
-				<div>
-					<label>Example result:</label>
-					<div class="input-cell"><span class="error example-result-error" ng-show="redirect.error">{{redirect.error}}</span><span class="example-result" ng-show="redirect.exampleResult">{{redirect.exampleResult}}</span></div>
-				</div>
-			</div>
-			<div id="advanced-toggle">
-				<a ng-click="showAdvanced=true" ng-show="!showAdvanced">Show advanced options...</a>
-				<a ng-click="showAdvanced=false" ng-show="showAdvanced">Hide advanced options...</a>
-			</div>
-			<div class="form-grid advanced" ng-show="showAdvanced">
-				<div>
-					<label>Exclude pattern:</label>
-					<div class="input-cell"><input type="text" ng-change="redirect.updateExampleResult()" ng-model="redirect.excludePattern" placeholder="Pattern to exclude certain urls from the redirection"/></div>
-				</div>
-				<div>
-					<label for="process-matches">Process matches:</label>
-					<div class="input-cell">
-						<select id="process-matches" ng-model="redirect.processMatches" ng-change="redirect.updateExampleResult()">
-							<option value="noProcessing">No Processing</option>
-							<option value="urlEncode">URL Encode</option>
-							<option value="urlDecode">URL Decode</option>
-							<option value="base64decode">Base64 Decode</option>
-						</select>
-						<span class="placeholder" ng-show="redirect.processMatches=='noProcessing'">Use matches as they are</span>
-						<span class="placeholder" ng-show="redirect.processMatches=='urlEncode'">E.g. turn /bar/foo?x=2 into %2Fbar%2Ffoo%3Fx%3D2</span>
-						<span class="placeholder" ng-show="redirect.processMatches=='urlDecode'">E.g. turn %2Fbar%2Ffoo%3Fx%3D2 into /bar/foo?x=2</span>
-						<span class="placeholder" ng-show="redirect.processMatches=='base64decode'">E.g. turn aHR0cDovL2Nubi5jb20= into http://cnn.com</span>
-					</div>
-				</div>
-				<div>
-					<label>Apply to:</label>
-					<div class="input-cell" id="apply-to">
-						<label ng-repeat="(key,value) in requestTypes"><input type="checkbox" ng-checked="appliesTo(key)" ng-click="toggleApplies(key)"><span>{{value}}</span></label>
-					</div>
-
+					<label>Author:</label>
+					<div class="input-cell"><input type="text" ng-model="quo.exampleUrl" ng-change="quo.updateExampleResult()" placeholder="http://example.com/some/path?a=1" /></div>
 				</div>
 			</div>
 			<div class="button-container">
-				<a ng-class="{disabled:redirect.error || redirect.includePattern == ''}" class="btn green large" ng-click="saveRedirect()">Save</a>
+				<a ng-class="{disabled:quo.error || quo.includePattern == ''}" class="btn green large" ng-click="saveQuo()">Save</a>
 				<a class="btn red large" ng-click="cancelEdit()">Cancel</a>
 			</div>
 		</div>
@@ -137,17 +64,17 @@
 
 		<div id="blur-wrapper" ng-class="{blur: showEditForm || showDeleteForm}">
 			
-			<h1>REDIRECTOR</h1>
-			<h5>Go where <em>YOU</em> want!</h5>
+			<h1>Quo</h1>
+			<h5>Motivational quotes</h5>
 
 			<div id="menu">
-				<a class="btn blue large" ng-click="createNewRedirect()">Create new redirect</a>
+				<a class="btn blue large" ng-click="createNewQuo()">Create new quo</a>
 				
-				<!-- Importing/Exporting of redirects -->
+				<!-- Importing/Exporting of quotes -->
 				<span ng-controller="ImportExportCtrl">
-					<input type="file" id="import-file" fileselected="importRedirects($file)" accept=".rjson,.json,.txt,text/*"  />
+					<input type="file" id="import-file" fileselected="importQuotes($file)" accept=".rjson,.json,.txt,text/*"  />
 					<label for="import-file" class="btn blue large">Import</label>
-					<a class="btn blue large" ng-mousedown="updateExportLink()" ng-href="{{redirectDownload}}" download="Redirector.json">Export</a>
+					<a class="btn blue large" ng-mousedown="updateExportLink()" ng-href="{{quoDownload}}" download="quo.json">Export</a>
 				</span>
 	
 				<a class="btn blue large" href="help.html" target="_blank">Help</a>
@@ -159,17 +86,17 @@
 				<a ng-click="message=null">&#x2716;</a>
 			</div>
 
-			<!-- List of existing redirects -->
-			<div class="redirect-table" ng-show="true" ng-controller="ListRedirectsCtrl">
-				<div class="redirect-row" ng-class="{disabled: r.disabled}" ng-repeat="r in redirects">
+			<!-- List of existing quotes -->
+			<div class="quo-table" ng-show="true" ng-controller="ListQuotesCtrl">
+				<div class="quo-row" ng-class="{disabled: r.disabled}" ng-repeat="r in quotes">
 					<h4><span class="disabled-marker" ng-show="r.disabled">[Disabled] </span><span>{{r.description}}</span></h4>
-					<div class="redirect-info">
+					<div class="quo-info">
 						<div>
-							<label>Redirect:</label>
+							<label>Quo:</label>
 							<p>{{r.includePattern}}</p>
 						</div>
 						<div>
-							<label>to:</label><p>{{r.redirectUrl}}</p>
+							<label>to:</label><p>{{r.quoUrl}}</p>
 						</div>
 						<div ng-show="r.excludePattern">
 							<label>excluding:</label><p>{{r.excludePattern}}</p>
@@ -186,18 +113,18 @@
 					</div>
 					<div>
 						<a class="btn medium blue" ng-click="toggleDisabled(r)">{{r.disabled ? "Enable" : "Disable"}}</a>
-						<a class="btn medium green" ng-click="editRedirect($index)">Edit</a>
-						<a class="btn medium red" ng-click="confirmDeleteRedirect($index)">Delete</a>
+						<a class="btn medium green" ng-click="editQuo($index)">Edit</a>
+						<a class="btn medium red" ng-click="confirmDeleteQuo($index)">Delete</a>
 						<a class="btn medium grey move-up-btn" ng-class="{disabled:$first}" ng-click="moveUp($index)">▲</a>
 						<a class="btn medium grey move-down-btn" ng-class="{disabled:$last}" ng-click="moveDown($index)">▼</a>
-						<a class="btn medium grey padded" ng-click="duplicateRedirect($index)">Duplicate</a>
+						<a class="btn medium grey padded" ng-click="duplicateQuo($index)">Duplicate</a>
 					</div>
 				</div>
-				<label id="storage-sync-option" ng-if="showSyncOption"><input type="checkbox" ng-model="isSyncEnabled" ng-click="toggleSyncSetting()" /> Enable Storage Sync</label>
+				<label id="storage-sync-option" ng-if="showSyncOption"><input type="checkbox" ng-model="isSyncEnabled" ng-click="toggleSyncSetting()" />Enable Storage Sync</label>
 			</div>
 
 			<footer>
-				<small>Redirector is created by <a target="_blank" href="http://einaregilsson.com">Einar Egilsson</a></small>
+				<small>Quo is created by <a target="_blank" href="https://sergioro.mx">Sergio Romero</a></small>
 			</footer>
 		
 		</div>
