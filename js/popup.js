@@ -15,42 +15,11 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 		  	$s.$apply();
 		});
     };
-    
 
-	storage.get({logging:false}, function(obj) {
-		$s.logging = obj.logging;
-		$s.$apply();
-	});
-
-    $s.toggleLogging = function() {
-		storage.get({logging:false}, function(obj) {
-			storage.set({logging:!obj.logging});
-		  	$s.logging = !obj.logging;
-		  	$s.$apply();
-		});
-	};
-
-	
-	//Toggle Notifications by sending a notifications
-	$s.enableNotifications = false; 
-	
-	storage.get({enableNotifications:false},function(obj){
-		$s.enableNotifications = obj.enableNotifications;
-		$s.$apply();
-	});
-	
-	$s.toggleNotifications=function(){
-		storage.get({enableNotifications:false},function(obj){
-		storage.set({enableNotifications:!obj.enableNotifications});
-			$s.enableNotifications = !obj.enableNotifications;
-			$s.$apply();
-	});
-	}
-
-	$s.openRedirectorSettings = function() {
+	$s.openQuoSettings = function() {
 
 		//switch to open one if we have it to minimize conflicts
-		var url = chrome.extension.getURL('redirector.html');
+		var url = chrome.extension.getURL('quo.html');
 		
 		//FIREFOXBUG: Firefox chokes on url:url filter if the url is a moz-extension:// url
 		//so we don't use that, do it the more manual way instead.

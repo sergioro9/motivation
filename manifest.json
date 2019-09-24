@@ -6,13 +6,13 @@
   "description": "Replace new tab page with Motivation",
 
   "icons": {
-     "16": "images/icon-16.png",
-     "48": "images/icon-48.png",
-     "128": "images/icon-128.png"
+     "16": "images/icon-active-16.png",
+     "48": "images/icon-active-48.png",
+     "128": "images/icon-active-128.png"
   },
 
    "background": {
-      "scripts": [ "quote.js" ]
+      "scripts": [ "js/quo.js", "js/background.js" ]
    },
 
    "chrome_url_overrides": {
@@ -21,8 +21,8 @@
 
    "browser_action": {
      "default_icon": {
-       "16": "images/icon-16.png",
-       "128": "images/icon-128.png"
+       "16": "images/icon-active-16.png",
+       "128": "images/icon-active-128.png"
      },
      "default_title": "Quo",
      "default_popup": "popup.html"
@@ -31,5 +31,15 @@
    "options_ui": {
      "page": "popup.html",
      "chrome_style": true
-   }
+   },
+
+   "permissions" : [
+     "webRequest",
+     "webRequestBlocking",
+     "storage",
+     "tabs",
+     "http://*/*",
+     "https://*/*",
+     "notifications"
+   ]
 }
