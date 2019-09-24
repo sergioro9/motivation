@@ -1,26 +1,35 @@
 {
+  "manifest_version": 2,
+  "name": "Quo",
+  "version": "0.6",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "description": "Replace new tab page with Motivation",
+
+  "icons": {
+     "16": "images/icon-16.png",
+     "48": "images/icon-48.png",
+     "128": "images/icon-128.png"
+  },
+
    "background": {
-      "scripts": [ "motivation.js" ]
+      "scripts": [ "quote.js" ]
    },
+
    "chrome_url_overrides": {
       "newtab": "dashboard.html"
    },
-   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-   "description": "Replace new tab page with Motivation",
-   "icons": {
-      "16": "images/icon-16.png",
-      "48": "images/icon-48.png",
-      "128": "images/icon-128.png"
-   },
+
    "browser_action": {
      "default_icon": {
        "16": "images/icon-16.png",
        "128": "images/icon-128.png"
      },
-     "default_title": "Quotes",
+     "default_title": "Quo",
      "default_popup": "popup.html"
    },
-   "manifest_version": 2,
-   "name": "Motivation",
-   "version": "0.6"
+
+   "options_ui": {
+     "page": "popup.html",
+     "chrome_style": true
+   }
 }
