@@ -8,9 +8,17 @@
    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
    "description": "Replace new tab page with Motivation",
    "icons": {
-      "128": "icon-128.png",
-      "16": "icon-16.png",
-      "48": "icon-48.png"
+      "16": "images/icon-16.png",
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png"
+   },
+   "browser_action": {
+     "default_icon": {
+       "16": "images/icon-16.png",
+       "128": "images/icon-128.png"
+     },
+     "default_title": "Quotes",
+     "default_popup": "popup.html"
    },
    "manifest_version": 2,
    "name": "Motivation",
